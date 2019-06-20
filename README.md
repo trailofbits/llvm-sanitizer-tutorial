@@ -1,8 +1,9 @@
 # llvm-sanitizer-tutorial
 
 This is a tutorial on how to build an LLVM sanitizer. 
+Related blogpost: <URL HERE> 
 
-# Build and run the testsanitizer 
+# Quickstart: Building the toolchain & running a sanitizer 
  
 ```
 #Clone the repo
@@ -12,4 +13,12 @@ mkdir build && cd build
 #configure and build, there are a lot of configuration options for LLVM
 cmake -DLLVM_TARGETS_TO_BUILD=x86 .. && make -j
 ```
+# Building an out of source pass 
+
+# Building a runtime component 
+
+# Integrating an out of source pass 
+
+# Integrating a runtime component 
+
 
