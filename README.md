@@ -11,7 +11,7 @@ git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-
 #Make the build dir 
 mkdir build && cd build 
 #configure and build, there are a lot of configuration options for LLVM
-cmake -DLLVM_TARGETS_TO_BUILD=x86 .. && make -j
+cmake -DLLVM_TARGETS_TO_BUILD="X86" .. && make -j
 ```
 
 # Building an out of source pass 
