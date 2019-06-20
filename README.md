@@ -19,12 +19,23 @@ cmake -DLLVM_TARGETS_TO_BUILD="X86" .. && make
 ```
 
 # Building an out of source pass 
+Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
+ayy yo do dat here 
+
 
 # Building a runtime component 
+When building your runtime component I found it important to 
 
 # Integrating an out of source pass 
 
 # Integrating a runtime component 
 
-# Helpful resources 
+# Some other things I learned 
+Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. 
 
+# Helpful resources 
+link the dam blogpost again lol
+eli's awesome stuff
+adrians awesome stuff 
+llvm conference awesome stuff 
+llvm class references 
