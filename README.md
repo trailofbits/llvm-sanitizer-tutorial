@@ -7,7 +7,7 @@ Related blogpost: <URL HERE>
  
 ```
 #Clone the repo
-git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-sanitizer-tutorial 
+git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-sanitizer-tutorial/llvm 
 #Make the build dir 
 mkdir build && cd build 
 #configure and build, there are a lot of configuration options for LLVM
