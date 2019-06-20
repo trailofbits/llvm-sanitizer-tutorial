@@ -13,6 +13,7 @@ mkdir build && cd build
 #configure and build, there are a lot of configuration options for LLVM
 cmake -DLLVM_TARGETS_TO_BUILD=x86 .. && make -j
 ```
+
 # Building an out of source pass 
 
 # Building a runtime component 
@@ -21,4 +22,5 @@ cmake -DLLVM_TARGETS_TO_BUILD=x86 .. && make -j
 
 # Integrating a runtime component 
 
+# Helpful resources 
 
