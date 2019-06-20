@@ -1,7 +1,11 @@
 # llvm-sanitizer-tutorial
 
 This is a tutorial on how to build an LLVM sanitizer. 
-Related blogpost: <URL HERE> 
+
+# Background 
+An LLVM sanitizer is a powerful tool used to instrument and analyze programs. This github repo holds an example sanitizer and step by step docuemtation to integrate a sanitizer into the toolchain. This sanitizer can serve as a template towards building more complex tools. For more information on what sanitizers are, see the related blogpost: 
+
+URL
 
 # Quickstart: Building the toolchain & running a sanitizer 
  
