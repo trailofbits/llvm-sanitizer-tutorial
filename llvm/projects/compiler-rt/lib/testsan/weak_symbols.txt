@@ -1,0 +1,3 @@
+__testsan_AllocateShadowMemory
+__testsan_StoreAddress
+__testsan_FreeAddress
