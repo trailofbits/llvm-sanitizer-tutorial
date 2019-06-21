@@ -27,11 +27,15 @@ ayy yo do the cmds here
 
 <br/>
 <br/>
-The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for a really simple example I made while I was learning. This shows how to create 3 types of passes and use the IR Builder, which is the most important API for llvm-based instrumenatation. Save this as `TutorialSanitizer.cpp` <br/>
+The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the full code, here is the important snippet. This shows how to create 3 types of passes and use the IR Builder, which is the most important API for llvm-based instrumenatation. <br/> 
+
+You can s
+
+Save this as `TutorialSanitizer.cpp` <br/>
 
 
 # Building a runtime component 
-
+The runtime component does not take much effort to build on it's own. You 
 
 # Integrating an out of source pass 
 
