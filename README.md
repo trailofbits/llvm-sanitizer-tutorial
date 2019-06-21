@@ -19,7 +19,7 @@ cmake -DLLVM_TARGETS_TO_BUILD="X86" .. && make
 cd bin && ./clang -fsanitize=testsan -g -o malloc_target ../../../target_programs/malloc_target.c
 ./malloc_target 
 ```
-You should see output from the transformation pass and additional output from the runtime component when the program is executed. Most of this readme will be from the blogpost above, but in this repo im going to list all the boring technical details that didn't make it past editing. Where to look for buildfiles, 
+You should see output from the transformation pass and additional output from the runtime component when the program is executed. Most of this readme will be from the blogpost above, but in this repo im going to list all the tedious technical details that didn't make it past editing. Where to look for buildfiles, 
 
 # Building an out of source pass 
 Why build out of source first? Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
