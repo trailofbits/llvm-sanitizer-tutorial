@@ -16,26 +16,35 @@ git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-
 mkdir build && cd build 
 #configure and build, there are a lot of configuration options for LLVM
 cmake -DLLVM_TARGETS_TO_BUILD="X86" .. && make
+cd bin && ./clang -fsanitize=testsan -g -o malloc_target ../../../target_programs/malloc_target.c
+./malloc_target 
 ```
+You should see output from the transformation pass and additional output from the runtime component when the program is executed. Most of this readme will be from the blogpost above, but in this repo im going to list all the boring technical details that didn't make it past editing. Where to look for buildfiles, 
 
 # Building an out of source pass 
-Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
-ayy yo do dat here 
+Why build out of source first? Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
+ayy yo do the cmds here 
+
+<br/>
+<br/>
+The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for a really simple example I made while I was learning. This shows how to create 3 types of passes and use the IR Builder, which is the most important API for llvm-based instrumenatation. Save this as `TutorialSanitizer.cpp` <br/>
 
 
 # Building a runtime component 
-When building your runtime component I found it important to 
+
 
 # Integrating an out of source pass 
 
 # Integrating a runtime component 
 
 # Some other things I learned 
-Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. 
+Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
+
+This might not need to be said but its my repo so w/e. If you're going to be working on the LLVM system or any other large system you should use an IDE. It will help you navigate the codebase much faster than you could really any other way. <br/>
 
 # Helpful resources 
-link the dam blogpost again lol
-eli's awesome stuff
-adrians awesome stuff 
-llvm conference awesome stuff 
-llvm class references 
+link the dam blogpost again lol <br/>
+eli's awesome stuff <br/>
+adrians awesome stuff <br/>
+llvm conference awesome stuff <br/>  
+llvm class references   
