@@ -29,7 +29,7 @@ ayy yo do the cmds here
 <br/>
 The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the full code, here is the important snippet. This shows how to create 3 types of passes and use the IR Builder, which is the most important API for llvm-based instrumenatation. <br/> 
 
-You can s
+The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. The module pass prints out every function in the module. The function pass has some more complexity... (continue tmrw im so tired) 
 
 Save this as `TutorialSanitizer.cpp` <br/>
 
@@ -42,7 +42,7 @@ The runtime component does not take much effort to build on it's own. You
 # Integrating a runtime component 
 
 # Some other things I learned 
-Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
+Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
 
 This might not need to be said but its my repo so w/e. If you're going to be working on the LLVM system or any other large system you should use an IDE. It will help you navigate the codebase much faster than you could really any other way. <br/>
 
