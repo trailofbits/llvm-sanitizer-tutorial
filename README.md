@@ -41,6 +41,8 @@ The runtime component does not take much effort to build on it's own. You
 
 # Integrating a runtime component 
 
+# Modifying the compiler driver
+
 # Some other things I learned 
 Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
 
