@@ -13,6 +13,7 @@ extern "C" {
 void testsan_AllocateShadowMemory();
 void testsan_SetFunctionName(char * func_name); 
 void testsan_PrintLeakSummary(); 
+void testsan_StoreAddress(char * addr); 
 }
 void * testsan_malloc(__sanitizer::uptr size); 
 void testsan_free(void * p); 

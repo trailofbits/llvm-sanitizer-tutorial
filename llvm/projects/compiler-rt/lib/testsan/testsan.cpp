@@ -48,9 +48,10 @@ void testsan_AllocateShadowMemory() {
 	VReport(1, "Shadow mem at %zx .. %zx\n", shadow_memory_storage.shadow_mem_start, shadow_memory_storage.shadow_mem_start + shadow_memory_storage.shadow_mem_size);
 }
 
-/*
+
 extern "C" SANITIZER_INTERFACE_ATTRIBUTE 
 void testsan_StoreAddress(char * value) {
+	VReport(1, "Malloc returned address %x\n", (void*)value); 
 	return;
 }
 
@@ -58,7 +59,7 @@ extern "C" SANITIZER_INTERFACE_ATTRIBUTE
 void testsan_FreeAddress(char * addr) {
 	return;
 }
-*/
+ 
 extern "C" SANITIZER_INTERFACE_ATTRIBUTE
 void testsan_SetFunctionName(char * func_name) {
 	//puts("Printing function name!"); 	
