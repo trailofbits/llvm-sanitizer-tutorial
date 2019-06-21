@@ -17,7 +17,7 @@ mkdir build && cd build
 #configure and build, there are a lot of configuration options for LLVM
 cmake -DLLVM_TARGETS_TO_BUILD="X86" .. && make
 cd bin && ./clang -fsanitize=testsan -g -o malloc_target ../../../target_programs/malloc_target.c
-./malloc_target 10
+./malloc_target
 ```
 You should see output from the transformation pass and additional output from the runtime component when the program is executed. Most of this readme will be from the blogpost above, but in this repo im going to list all the tedious technical details that didn't make it past editing. Note that this post only covers on how to build a sanitizer for Linux. 
 
