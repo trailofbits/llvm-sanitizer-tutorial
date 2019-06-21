@@ -33,7 +33,7 @@ foreach(arch ${TESTSAN_SUPPORTED_ARCH})
 		PARENT_TARGET testsan)
 	add_sanitizer_rt_symbols(clang_rt.testsan
 		ARCHS ${arch}
-		EXTRA testsan.syms.extra)
+		 )
 	add_dependencies(testsan
 		clang_rt.testsan-${arch}-symbols)
 endforeach()

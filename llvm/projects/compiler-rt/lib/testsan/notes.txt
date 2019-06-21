@@ -1,1 +1,0 @@
-Also changing ../../cmake/config-ix.cmake, just search for simpsan/SIMPSAN and its easy to see

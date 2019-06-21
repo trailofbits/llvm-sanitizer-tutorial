@@ -8,11 +8,10 @@ char * foo(int size) {
 
 int main(int argc, char * argv[]) {
 
-	if (argc < 1) {
+	if (argc < 2) {
 		printf("Provide a size for malloc!\n Ex: ./malloc_target 10\n"); 
 		return -1; 	
 	}
 	char * some_ptr = foo(atoi(argv[1]));
-	*some_ptr = 'A';  
 	return 0; 
 }

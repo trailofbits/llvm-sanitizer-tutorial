@@ -11,10 +11,9 @@
 
 extern "C" {
 void testsan_AllocateShadowMemory();
-void testsan_SetFunctionName(char * func_name); 
-void testsan_PrintLeakSummary(); 
-void testsan_StoreAddress(char * addr); 
+void testsan_HelloFunction(char * func_name); 
+void testsan_EndOfMain(); 
+void testsan_AfterMalloc(char * addr); 
 }
-void * testsan_malloc(__sanitizer::uptr size); 
-void testsan_free(void * p); 
+void * testsan_Malloc(__sanitizer::uptr size); 
 void testsan_InitInterceptors(); 

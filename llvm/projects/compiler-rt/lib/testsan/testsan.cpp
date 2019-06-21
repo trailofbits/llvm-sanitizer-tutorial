@@ -10,7 +10,7 @@ using namespace __sanitizer;
 //}
 
 INTERCEPTOR(void *, malloc, uptr size) {
-	return testsan_malloc(size); 
+	return testsan_Malloc(size); 
 
 }
 
@@ -50,39 +50,33 @@ void testsan_AllocateShadowMemory() {
 
 
 extern "C" SANITIZER_INTERFACE_ATTRIBUTE 
-void testsan_StoreAddress(char * value) {
-	VReport(1, "Malloc returned address %x\n", (void*)value); 
-	return;
-}
-
-extern "C" SANITIZER_INTERFACE_ATTRIBUTE	
-void testsan_FreeAddress(char * addr) {
+void testsan_AfterMalloc(char * value) {
+	//Printf is sanitizer internal printf
+	Printf("Malloc returned address %x\n", value); 
 	return;
 }
  
 extern "C" SANITIZER_INTERFACE_ATTRIBUTE
-void testsan_SetFunctionName(char * func_name) {
+void testsan_HelloFunction(char * func_name) {
 	//puts("Printing function name!"); 	
 	return;
 }
 
 extern "C" SANITIZER_INTERFACE_ATTRIBUTE
-void testsan_PrintLeakSummary() {
+void testsan_EndOfMain() {
+		//internal strlen is from the sanitizer runtimes libc imp. 
+		write(1, "End of main function!\n", internal_strlen("End of main function!\n")); 
 	return; 
 }
 
-void * testsan_malloc(uptr size) {
+void * testsan_Malloc(uptr size) {
+	//This is how you call real malloc 
 	void * ret = REAL(malloc)(size); 
-		VReport(2, "Hooked malloc testsan runtime!\n");
-		write(1, "test\n\0", 5); 
-	//std::cout << "Malloc addr/size is: " << ret << " " << size << std::endl; 
-	return ret; 
+		write(1, "Hooked malloc!\n", internal_strlen("Hooked malloc!\n")); 
+	//You don't have to return the real address, but program will crash 
+	return (void*)0xdeadbeef; 
 }
 
-void testsan_free(void * p) {
-	//std::cout << "Freeing addr: " << p << std::endl; 
-	//REAL(free)(p); 
-}
 
 extern "C" SANITIZER_INTERFACE_ATTRIBUTE
 #if !SANITIZER_CAN_USE_PREINIT_ARRAY

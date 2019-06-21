@@ -46,30 +46,11 @@ namespace {
 
 bool TestSanitizerModule::runOnModule(Module &module) {
 	errs() << "This is the LLVM Module for source file:  " << module.getSourceFileName() << "\n"; 	
-
-	//This is the LLVM context, this contains important data and is used to make most important things 
-	LLVMContext& context = module.getContext();
-	IRBuilder<> builder(context);
-
-	//The LLVM module class has a list of all functions in the module, I just picked the first one in the list. 
-	Function& single_function = *(module.begin()); 
-	builder.SetInsertPoint(&(single_function.getEntryBlock().front()));
-
-	//Create a string
-	Value *hello_world_str = builder.CreateGlobalStringPtr("Hello World!\n");
-
-	//Create the prototype for puts function 
-	std::vector<llvm::Type *> puts_args;
-	puts_args.push_back(builder.getInt8Ty()->getPointerTo());
-	ArrayRef<Type*> puts_args_ref(puts_args);
-
-	//Create function and insert call into IR
-	FunctionType *puts_type =
-		FunctionType::get(builder.getInt32Ty(), puts_args_ref, false);
-	Constant *putsFunc = module.getOrInsertFunction("puts", puts_type);
-	builder.CreateCall(putsFunc, hello_world_str);
-
-	return true;
+	for (auto &func : module) {
+		errs() << "Hello function: " << func.getName() << "!\n"; 
+	}
+	//Makes no changes
+	return false;
 }
 
 
@@ -93,7 +74,7 @@ bool TestSanitizerFunction::runOnFunction(Function &func) {
 		FunctionType::get(llvm::Type::getVoidTy(context), name_set_args_ref, false);
 
 	//Create the function and use the IR Builder to create a function call
-	Constant * name_set_func = func.getParent()->getOrInsertFunction("testsan_SetFunctionName", name_set_func_type);
+	Constant * name_set_func = func.getParent()->getOrInsertFunction("testsan_HelloFunction", name_set_func_type);
 	Value * name_val = builder.CreateGlobalStringPtr(func.getName());
  	Value * args[] = {name_val};
 	builder.CreateCall(name_set_func, args);
@@ -111,7 +92,7 @@ bool TestSanitizerFunction::runOnFunction(Function &func) {
 					FunctionType * summary_func_type = 
 							FunctionType::get(llvm::Type::getVoidTy(context), summary_args_ref, false);
 
-					Constant * summary_func = func.getParent()->getOrInsertFunction("testsan_PrintLeakSummary", summary_func_type);
+					Constant * summary_func = func.getParent()->getOrInsertFunction("testsan_EndOfMain", summary_func_type);
 					builder.CreateCall(summary_func, {});
 				}
 			}
@@ -125,19 +106,16 @@ bool TestSanitizerBlock::runOnBasicBlock(BasicBlock &BB) {
 		
 	LLVMContext& context = BB.getContext();
 	Module* current_module = BB.getModule(); 	
-	
+
+	//This is similar to the previous pass 	
 	PointerType * byte_ptr_type = llvm::Type::getInt8Ty(context)->getPointerTo(); 	
-
-	errs() << "got void ty\n"; 
-
 	std::vector<llvm::Type *> log_allocation_args;
 	log_allocation_args.push_back(byte_ptr_type);
-	errs() << "got ptr 2\n"; 
 	ArrayRef<Type*> log_allocation_ref(log_allocation_args);
 
 	FunctionType *log_allocation_type = FunctionType::get(byte_ptr_type, log_allocation_ref, false);
 	
-	Constant *log_allocation_func = current_module->getOrInsertFunction("testsan_StoreAddress", log_allocation_type);
+	Constant *log_allocation_func = current_module->getOrInsertFunction("testsan_AfterMalloc", log_allocation_type);
 	
 	errs() << "Checking instructions\n"; 	
 	for (auto& Inst : BB) {
