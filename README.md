@@ -46,8 +46,6 @@ The runtime component does not take much effort to build on it's own. You
 # Some other things I learned 
 Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
 
-This might not need to be said but its my repo so w/e. If you're going to be working on the LLVM system or any other large system you should use an IDE. It will help you navigate the codebase much faster than you could really any other way. <br/>
-
 # Helpful resources 
 link the dam blogpost again lol <br/>
 eli's awesome stuff <br/>
