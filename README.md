@@ -8,7 +8,9 @@ An LLVM sanitizer is a powerful tool used to instrument and analyze programs. Th
 URL
 
 # Quickstart: Building the toolchain & running a sanitizer 
- 
+
+There are three patch files in this repo, one for LLVM, clang, and compiler-rt. The install script will download version 8, apply the patches, and put the new files in their appropriate locations. 
+
 ```
 EDIT THIS HAS TO CHANGE CUZ WE DOIN PATCH FILES
 #Clone the repo
@@ -24,9 +26,12 @@ You should see output from the LLVM pass and additional output from the runtime 
 
 # Building an out of source pass 
 Why build out of source first? Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
-ayy yo do the cmds here 
 
 <br/>
+`clang -c -emit-llvm ../../../target_programs/malloc_target.c -o malloc_target.bc`
+`opt -load lib/LLVMTestPass.so -testmod < malloc_target.bc > malloc_instrumented.bc` 
+`./llvm-dis < malloc_instrumented.bc | less`
+
 <br/>
 The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the code I'm going to be referencing. The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. `Explain the pass here.` At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module create a new directory in `llvm/lib/Transforms/` and use the `add_llvm_library` macro. You can copy the TestPass or the Hello cmake files for reference. 
 
@@ -40,11 +45,12 @@ There are a few steps required to build the runtime component.
   * use the add
   * Use the add_compiler_rt_runtime macro to add your runtime.
 
+# Defining the sanitizer/Modifying the driver 
+
 # Integrating a pass 
 
-# Integrating a runtime component 
 
-# Modifying the compiler driver
+# Integrating a runtime component 
 
 # Some other things I learned 
 Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
