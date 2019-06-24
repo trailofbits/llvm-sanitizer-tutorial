@@ -1,14 +1,13 @@
 include_directories(..)
 
-message([STATUS] "===============================TESTSAN============================")
 # Runtime library sources and build flags.
 set(TESTSAN_RTL_SOURCES
 	testsan.cpp
 	)
 
 set(TESTSAN_RTL_HEADERS
-	  testsan.h
-		)
+  testsan.h
+	)
 
 set(TESTSAN_COMMON_CFLAGS ${SANITIZER_COMMON_CFLAGS})
 append_rtti_flag(OFF TESTSAN_COMMON_CFLAGS)
@@ -19,7 +18,6 @@ append_list_if(COMPILER_RT_HAS_FFREESTANDING_FLAG -ffreestanding TESTSAN_COMMON_
 add_compiler_rt_component(testsan)
 
 foreach(arch ${TESTSAN_SUPPORTED_ARCH})
-	message([STATUS] "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	set(TESTSAN_CFLAGS ${TESTSAN_COMMON_CFLAGS})
 	append_list_if(COMPILER_RT_HAS_FPIE_FLAG -fPIE TESTSAN_CFLAGS)
 	add_compiler_rt_runtime(clang_rt.testsan
