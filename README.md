@@ -27,15 +27,17 @@ ayy yo do the cmds here
 
 <br/>
 <br/>
-The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the full code, here is the important snippet. This shows how to create 3 types of passes and use the IR Builder, which is the most important API for llvm-based instrumenatation. <br/> 
-
-The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. `Explain the pass here.` At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module create a new directory in `llvm/lib/Transforms/` and use the `add_llvm_library` macro. You can copy the TestPass or the Hello cmake files for reference. 
+The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the code I'm going to be referencing. The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. `Explain the pass here.` At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module create a new directory in `llvm/lib/Transforms/` and use the `add_llvm_library` macro. You can copy the TestPass or the Hello cmake files for reference. 
 
 # Building a runtime component 
-This runtime component supplies runtime functions that the transformation pass will call into and an example hook of malloc, which returns a fake address. There are a two other things to take note of in this example. T
+This runtime component supplies runtime functions that the transformation pass will call into and an example hook of malloc, which returns a fake address. The actual mechanics of the `INTERCEPTOR` macro differs based on the OS, on Linux it replaces the symbol address and uses dlsym to resolve the real function address. There are a two other things to take note of in this example. 
 * The macro `SANITIZER_INTERFACE` tells compiler-rt that it needs to export that function symbol because it might be called by the instrumented program. 
 * The init function contains macro magic, it's designed to run immediately upon being loaded. This is either done by placing the function in the `.pre_init` array or with the `constructor` attribute. 
-To build the runtime component 
+There are a few steps required to build the runtime component. 
+* Create a directory for your source in llvm/projects/compiler-rt/lib/ 
+* In the cmake file you need to 
+  * use the add
+  * Use the add_compiler_rt_runtime macro to add your runtime.
 
 # Integrating a pass 
 
