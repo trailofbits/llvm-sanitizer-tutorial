@@ -29,16 +29,13 @@ ayy yo do the cmds here
 <br/>
 The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the full code, here is the important snippet. This shows how to create 3 types of passes and use the IR Builder, which is the most important API for llvm-based instrumenatation. <br/> 
 
-The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. `Explain the pass here.` At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module:
-* Create a new directory in llvm/lib/Transforms/ for your pass 
-* 
-
-
-Save this as `TutorialSanitizer.cpp` <br/>
-
+The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. `Explain the pass here.` At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module create a new directory in `llvm/lib/Transforms/` and use the `add_llvm_library` macro. You can copy the TestPass or the Hello cmake files for reference. 
 
 # Building a runtime component 
-This runtime component supplies runtime functions that the transformation pass will call into and an example hook of malloc, which returns a fake address. There are a few other things to note in this example. The macro `SANITIZER_INTERFACE` tells compiler-rt that it needs to export that function symbol because it might be called by the instrumented program. 
+This runtime component supplies runtime functions that the transformation pass will call into and an example hook of malloc, which returns a fake address. There are a two other things to take note of in this example. T
+* The macro `SANITIZER_INTERFACE` tells compiler-rt that it needs to export that function symbol because it might be called by the instrumented program. 
+* The init function contains macro magic, it's designed to run immediately upon being loaded. This is either done by placing the function in the `.pre_init` array or with the `constructor` attribute. 
+To build the runtime component 
 
 # Integrating a pass 
 
