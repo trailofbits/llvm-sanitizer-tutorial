@@ -10,6 +10,7 @@ URL
 # Quickstart: Building the toolchain & running a sanitizer 
  
 ```
+EDIT THIS HAS TO CHANGE CUZ WE DOIN PATCH FILES
 #Clone the repo
 git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-sanitizer-tutorial/llvm 
 #Make the build dir 
