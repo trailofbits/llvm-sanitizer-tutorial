@@ -12,7 +12,6 @@ URL
 There are three patch files in this repo, one for LLVM, clang, and compiler-rt. The install script will download version 8, apply the patches, and put the new files in their appropriate locations. 
 
 ```
-EDIT THIS HAS TO CHANGE CUZ WE DOIN PATCH FILES
 #Clone the repo
 git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-sanitizer-tutorial/llvm 
 #Make the build dir 
@@ -64,9 +63,16 @@ These steps are what you need to do to define the sanitizer and set up the compi
 
 # Integrating a pass 
 This is just a few steps (come back to this and write it out) but copy the out of source pass into the instrumentation directory. Change the register functions to functions that create the object. Modify the cmake file. Modify the LLVM header. Create a function that calls the create function. In the compiler driver check if the sanitizer is being used and if it is pass that function to the pass manager.  
+* Copy your out of source pass code into `llvm/lib/Transform/Instrumentation`
+ * Remove the three lines that register with opt and replace them with functions that create your passes. Check the TestPass.cpp file for a reference
+ * Edit the CMake file to include your pass 
+Now that you have an internal instrumentation pass, time to add it to the manager 
+* Create a new function in `clang/lib/CodeGen/BackendUtil.cpp` that adds your pass to the manager. You can look for the addTestSanitizer function for a reference, it's all boilerplate. 
+* Later in the same file there is a function to create passes, check if your sanitizer is being run and if it is add your pass
 
 # Integrating a runtime component 
 I think a quick thing in common args then in a specific toolchain for the operating system. Basically just check if its needed and pushback into the static runtimes. That will make it link the library. 
+This step consists of modifying the out of source pass and adding your pass to the pass manager. 
 
 
 # Some other things I learned 
