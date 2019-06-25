@@ -75,7 +75,7 @@ Now that you have an internal instrumentation pass, time to add it to the manage
 * This part is dependent on your operating system. in `lib/Driver/Toolchains/Linux.cpp` find the `getSupportedSanitizers` function and add your sanitizer to this list of the architectures are correct. 
 
 # Some other things I learned 
-Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache.
+Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. Fortunately compiler-rt hides a lot of the nastiness from you. Try to use the sanitizer interface, it could save you from some headaches. 
 
 If you are having issues with some of the cmake build systems I would double check to see you didn't make any typos. For example if you put the architecture as ${x86}, it needs to be ${X86} etc etc. 
 
