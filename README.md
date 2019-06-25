@@ -57,6 +57,9 @@ The next step is modifying the `compiler-rt/cmake/config-ix.make`. This is apart
 At this point you should be able to build your runtime pass by just attempting to build the toolchain. 
 
 # Defining the sanitizer/Modifying the driver 
+These steps are what you need to do to define the sanitizer and set up the compiler driver to be ready for integration. 
+* In `llvm/tools/clang/include/Basic/Sanitizers.def` add your sanitizers using the macro like all the others. 
+* In `llvm/tools/clang/`
 
 # Integrating a pass 
 
