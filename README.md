@@ -39,7 +39,9 @@ The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/T
 Sanitizer runtimes are located in `llvm/projects/compiler-rt/lib/`. The sanitizer runtime component supplies runtime functions that the transformation pass will call into. In the testsan directory, there is an example runtime that defines some functions and shows how to use the interceptor interface. The actual mechanics of the `INTERCEPTOR` macro differs based on the OS, on Linux it replaces the symbol address and uses dlsym to resolve the real function address. There are a two other things to take note of in this example. 
 * The macro `SANITIZER_INTERFACE` tells compiler-rt that it needs to export that function symbol because it might be called by the instrumented program. 
 * The init function contains macro magic, it's designed to run immediately upon being loaded. This is either done by placing the function in the `.pre_init` array or with the `constructor` attribute. 
+
 There are a few steps required to build the runtime component. Look at the `testsan` cmake file for an example reference on how to use these cmake macros. If you are building on linux you can probably just copy it and replace testsan with the name of your sanitizer. If there is confusion the macros are defined in `compiler-rt/cmake`. There will be a few sanitizer specific things are
+
 * Create a directory for your source in `llvm/projects/compiler-rt/lib/`
 * In the cmake file you need to 
   * Add the component to compiler-rt 
