@@ -1,4 +1,4 @@
-# llvm-sanitizer-tutorial
+# llvm-sanitizer-tutorial and documentation
 
 This is a tutorial on how to build an LLVM sanitizer. 
 
@@ -59,7 +59,7 @@ At this point you should be able to build your runtime pass by just attempting t
 # Defining the sanitizer/Modifying the driver 
 These steps are what you need to do to define the sanitizer and set up the compiler driver to be ready for integration. 
 * In `llvm/tools/clang/include/Basic/Sanitizers.def` add your sanitizers using the macro like all the others. 
-* In `llvm/tools/clang/`
+* In `llvm/tools/clang/lib/Driver/SanitizersArgs.h` add a quick helper function to check if the runtime is required. For an example check the `needsDfSanRT()` function. This step is not actually needed because you can inline it anywhere since it's simple but for more complex sanitizers you can create complicated logic in `SanitizersArgs.cpp`
 
 # Integrating a pass 
 
