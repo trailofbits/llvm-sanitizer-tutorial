@@ -85,8 +85,13 @@ There is actually more that goes into sanitizer development that I didn't cover 
 
 # Helpful resources 
 https://blog.trailofbits.com/2019/06/25/creating-an-llvm-sanitizer-from-hopes-and-dreams/
+
 https://eli.thegreenplace.net/
+
 https://www.cs.cornell.edu/~asampson/blog/llvm.html
+
 https://llvm.org/docs/LangRef.html
+
 https://llvm.org/devmtg/2018-04/
+
 https://reviews.llvm.org/D32199
