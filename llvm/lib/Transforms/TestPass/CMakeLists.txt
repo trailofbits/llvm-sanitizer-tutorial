@@ -1,4 +1,4 @@
-add_llvm_library( LLVMTestPass MODULE BUILDTREE_ONLY
+add_llvm_library(LLVMTestPass MODULE BUILDTREE_ONLY
 	TestPass.cpp
 
 	DEPENDS

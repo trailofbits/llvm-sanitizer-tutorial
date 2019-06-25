@@ -8,12 +8,8 @@ set(TESTSAN_RTL_SOURCES
 set(TESTSAN_RTL_HEADERS
   testsan.h
 	)
-
+#No special cflags
 set(TESTSAN_COMMON_CFLAGS ${SANITIZER_COMMON_CFLAGS})
-append_rtti_flag(OFF TESTSAN_COMMON_CFLAGS)
-# Prevent clang from generating libc calls.
-append_list_if(COMPILER_RT_HAS_FFREESTANDING_FLAG -ffreestanding TESTSAN_COMMON_CFLAGS)
-
 # Static runtime library.
 add_compiler_rt_component(testsan)
 
