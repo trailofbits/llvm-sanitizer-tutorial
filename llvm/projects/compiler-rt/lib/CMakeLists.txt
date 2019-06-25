@@ -37,10 +37,7 @@ if(COMPILER_RT_BUILD_SANITIZERS)
   endif()
 
 	#vvvvvvvvvvvvvvvvvvvvvvvvv This variable is in cmake/config
-	message([STATUS]"REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-	message([STATUS]${COMPILER_RT_SANITIZERS_TO_BUILD})
 	foreach(sanitizer ${COMPILER_RT_SANITIZERS_TO_BUILD})
-		message([STATUS]${sanitizer})
     compiler_rt_build_runtime(${sanitizer})
   endforeach()
 endif()
