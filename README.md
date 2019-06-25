@@ -28,22 +28,24 @@ You should see output from the LLVM pass and additional output from the runtime 
 Why build out of source first? Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
 
 ```
-clang -c -emit-llvm ../../../target_programs/malloc_target.c -o malloc_target.bc
-`opt -load lib/LLVMTestPass.so -testmod < malloc_target.bc > malloc_instrumented.bc 
-`./llvm-dis < malloc_instrumented.bc | less
+./clang -c -emit-llvm ../../../target_programs/malloc_target.c -o malloc_target.bc
+./opt -load ../lib/LLVMTestPass.so -testfunc < malloc_target.bc > malloc_instrumented.bc 
+./llvm-dis < malloc_instrumented.bc | less
 ```
 
-The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the code I'm going to be referencing. The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. `Explain the pass here.` At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module create a new directory in `llvm/lib/Transforms/` and use the `add_llvm_library` macro. You can copy the TestPass or the Hello cmake files for reference. 
+The first thing is to create your pass, check out `llvm/lib/Transform/TestPass/TestPass.cpp` for the code I'm going to be referencing. The LLVM module is the largest unit of compilation, it essentially represents the file. The function and basic block passes operate at those respective levels. The module pass just prints out the function names, the function pass instruments function entries, and the basic block pass inserts function calls after malloc. These function symbols will be defined inside of our runtime component. At the bottom of the file there is a few lines of code to register the pass with `opt`. Later on these will be removed and replaced with functions that create the pass object. These functions will be called by the LLVM pass manager when your specify your sanitizer to clang. To build this module create a new directory in `llvm/lib/Transforms/` and use the `add_llvm_library` macro. You can copy the TestPass or the Hello cmake files for reference. 
 
 # Building a runtime component 
-This runtime component supplies runtime functions that the transformation pass will call into and an example hook of malloc, which returns a fake address. The actual mechanics of the `INTERCEPTOR` macro differs based on the OS, on Linux it replaces the symbol address and uses dlsym to resolve the real function address. There are a two other things to take note of in this example. 
+Sanitizer runtimes are located in `llvm/projects/compiler-rt/lib/`. The sanitizer runtime component supplies runtime functions that the transformation pass will call into. In the testsan directory, there is an example runtime that defines some functions and shows how to use the interceptor interface. The actual mechanics of the `INTERCEPTOR` macro differs based on the OS, on Linux it replaces the symbol address and uses dlsym to resolve the real function address. There are a two other things to take note of in this example. 
 * The macro `SANITIZER_INTERFACE` tells compiler-rt that it needs to export that function symbol because it might be called by the instrumented program. 
 * The init function contains macro magic, it's designed to run immediately upon being loaded. This is either done by placing the function in the `.pre_init` array or with the `constructor` attribute. 
-There are a few steps required to build the runtime component. 
-* Create a directory for your source in llvm/projects/compiler-rt/lib/ 
+There are a few steps required to build the runtime component. Look at the `testsan` cmake file for an example reference on how to use these cmake macros. If you are building on linux you can probably just copy it and replace testsan with the name of your sanitizer. If there is confusion the macros are defined in `compiler-rt/cmake`. There will be a few sanitizer specific things are
+* Create a directory for your source in `llvm/projects/compiler-rt/lib/`
 * In the cmake file you need to 
-  * use the add
-  * Use the add_compiler_rt_runtime macro to add your runtime.
+  * Add the component to compiler-rt 
+  * Use the add_compiler_rt_runtime macro to add your runtime
+    * Make sure to include the RTCommon libs and interceptor lib if you use them.
+  * Use add_sanitizer_rt_symbols to generate the interface symbols 
 
 # Defining the sanitizer/Modifying the driver 
 
