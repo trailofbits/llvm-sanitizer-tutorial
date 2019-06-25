@@ -3,9 +3,7 @@
 This is a tutorial on how to build an LLVM sanitizer. 
 
 # Background 
-An LLVM sanitizer is a powerful tool used to instrument and analyze programs. This github repo holds an example sanitizer and step by step docuemtation to integrate a sanitizer into the toolchain. This sanitizer can serve as a template towards building more complex tools. For more information on what sanitizers are, see the related blogpost: 
-
-URL
+An LLVM sanitizer is a powerful tool used to instrument and analyze programs. This github repo holds an example sanitizer and step by step docuemtation to integrate a sanitizer into the toolchain. This sanitizer can serve as a template towards building more complex tools. For more information on what sanitizers are, see the related blogpost: https://blog.trailofbits.com/2019/06/25/creating-an-llvm-sanitizer-from-hopes-and-dreams/
 
 # Quickstart: Building the toolchain & running a sanitizer 
 
@@ -62,18 +60,18 @@ These steps are what you need to do to define the sanitizer and set up the compi
 * In `clang/lib/CodeGen/BackendUtil.cpp` check if your sanitizer is being run, and if it is set the pass to run last. You can look at any of the other sanitizers for reference, it's just boilerplate.   
 
 # Integrating a pass 
-This is just a few steps (come back to this and write it out) but copy the out of source pass into the instrumentation directory. Change the register functions to functions that create the object. Modify the cmake file. Modify the LLVM header. Create a function that calls the create function. In the compiler driver check if the sanitizer is being used and if it is pass that function to the pass manager.  
+This is just a few steps, the work is mostly done since the pass is already written. The only thing now is to add it to the internal build system and help the driver find it. 
 * Copy your out of source pass code into `llvm/lib/Transform/Instrumentation`
  * Remove the three lines that register with opt and replace them with functions that create your passes. Check the TestPass.cpp file for a reference
  * Edit the CMake file to include your pass 
 Now that you have an internal instrumentation pass, time to add it to the manager 
+* Define the prototype of the function you just made in `llvm/lib/Transform/Instrumentation` in `llvm/include/llvm/Transforms/Instrumentation.h`. This way the driver can see it. 
 * Create a new function in `clang/lib/CodeGen/BackendUtil.cpp` that adds your pass to the manager. You can look for the addTestSanitizer function for a reference, it's all boilerplate. 
-* Later in the same file there is a function to create passes, check if your sanitizer is being run and if it is add your pass
+* Later in the same file there is a function called `CreatePasses`, in it check if your sanitizer is being run and if it is add your pass
 
 # Integrating a runtime component 
-I think a quick thing in common args then in a specific toolchain for the operating system. Basically just check if its needed and pushback into the static runtimes. That will make it link the library. 
-This step consists of modifying the out of source pass and adding your pass to the pass manager. 
-
+* In `clang/lib/Driver/CommonArgs.cpp` the driver calls `collectSaniitzerRuntimes` to decide which runtimes should be used. Add a check like the others to see if your sanitizer should be used, and if it is add it to the list of static runtimes. 
+* This part is dependent on your operating system. in `lib/Driver/Toolchains/Linux.cpp` find the `getSupportedSanitizers` function and add your sanitizer to this list of the architectures are correct. 
 
 # Some other things I learned 
 Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache.
@@ -86,9 +84,9 @@ Overall this winternship was a great experience, and I hope that this repo docum
 There is actually more that goes into sanitizer development that I didn't cover here. I think the best way to learn is to look at sanitizer pull requests and see what they modify and change. 
 
 # Helpful resources 
-link the dam blogpost again lol <br/>
-eli's awesome stuff <br/>
-adrians awesome stuff <br/>
-llvm conference awesome stuff <br/>  
-llvm class references   
-Tysan PR 
+https://blog.trailofbits.com/2019/06/25/creating-an-llvm-sanitizer-from-hopes-and-dreams/
+https://eli.thegreenplace.net/
+https://www.cs.cornell.edu/~asampson/blog/llvm.html
+https://llvm.org/docs/LangRef.html
+https://llvm.org/devmtg/2018-04/
+https://reviews.llvm.org/D32199
