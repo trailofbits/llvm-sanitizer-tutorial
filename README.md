@@ -48,6 +48,13 @@ There are a few steps required to build the runtime component. Look at the `test
   * Use the add_compiler_rt_runtime macro to add your runtime
     * Make sure to include the RTCommon libs and interceptor lib if you use them.
   * Use add_sanitizer_rt_symbols to generate the interface symbols 
+  
+The next step is modifying the `compiler-rt/cmake/config-ix.make`. This is apart of the compiler-rt build system and sets variables for your sanitizer to decide if your component could be built by checking to see what operating system and architectures you set. The file is actually rather large, feel free to search for TESTSAN and testsan to find the right places. 
+* add your sanitizer name to the list of all sanitizers. The cmake file in the lib directory iterates over the sanitizers in this list to decide which ones to try and build.
+* define your sanitizers supported architectures (X86, X86_64) 
+* check if the operating system is supported for your architecture and set build flag to true 
+
+At this point you should be able to build your runtime pass by just attempting to build the toolchain. 
 
 # Defining the sanitizer/Modifying the driver 
 
@@ -57,7 +64,11 @@ There are a few steps required to build the runtime component. Look at the `test
 # Integrating a runtime component 
 
 # Some other things I learned 
-Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache. <br/> 
+Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache.
+
+If you are having issues with some of the cmake build systems I would double check to see you didn't make any typos. For example if you put the architecture as ${x86}, it needs to be ${X86} etc etc. 
+
+Overall this winternship was a great experience, and I hope that this repo documents what I learned so the rest of you can build sanitizers without needing to comb through the toolchain. Below are some of the helpful resources I linked in the blogpost, they are all really great. 
 
 # Helpful resources 
 link the dam blogpost again lol <br/>
