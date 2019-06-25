@@ -9,6 +9,7 @@ An LLVM sanitizer is a powerful tool used to instrument and analyze programs. Th
 
 There are three patch files in this repo, one for LLVM, clang, and compiler-rt. The install script will download version 8, apply the patches, and put the new files in their appropriate locations. 
 
+This will be stored as a .patch shortly 
 ```
 #Clone the repo
 git clone https://github.com/trailofbits/llvm-sanitizer-tutorial.git && cd llvm-sanitizer-tutorial/llvm 
