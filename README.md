@@ -60,11 +60,14 @@ At this point you should be able to build your runtime pass by just attempting t
 These steps are what you need to do to define the sanitizer and set up the compiler driver to be ready for integration. 
 * In `llvm/tools/clang/include/Basic/Sanitizers.def` add your sanitizers using the macro like all the others. 
 * In `llvm/tools/clang/lib/Driver/SanitizersArgs.h` add a quick helper function to check if the runtime is required. For an example check the `needsDfSanRT()` function. This step is not actually needed because you can inline it anywhere since it's simple but for more complex sanitizers you can create complicated logic in `SanitizersArgs.cpp`
+* In `clang/lib/CodeGen/BackendUtil.cpp` check if your sanitizer is being run, and if it is set the pass to run last. You can look at any of the other sanitizers for reference, it's just boilerplate.   
 
 # Integrating a pass 
-
+This is just a few steps (come back to this and write it out) but copy the out of source pass into the instrumentation directory. Change the register functions to functions that create the object. Modify the cmake file. Modify the LLVM header. Create a function that calls the create function. In the compiler driver check if the sanitizer is being used and if it is pass that function to the pass manager.  
 
 # Integrating a runtime component 
+I think a quick thing in common args then in a specific toolchain for the operating system. Basically just check if its needed and pushback into the static runtimes. That will make it link the library. 
+
 
 # Some other things I learned 
 Your IR passes will be operating system agnostic but other parts of the toolchain are not. When integrating your sanitizer you will have to perform different build operations for OSX/Windows etc. For example in this tutorial we statically linked the runtime to  Fortunately compiler-rt hides a lot of the nastiness from you. I reccomend trying to use the sanitizer runtime interface as much as possible so you can run on as many operating systems without getting a headache.
@@ -73,9 +76,13 @@ If you are having issues with some of the cmake build systems I would double che
 
 Overall this winternship was a great experience, and I hope that this repo documents what I learned so the rest of you can build sanitizers without needing to comb through the toolchain. Below are some of the helpful resources I linked in the blogpost, they are all really great. 
 
+# Other notes 
+There is actually more that goes into sanitizer development that I didn't cover here. I think the best way to learn is to look at sanitizer pull requests and see what they modify and change. 
+
 # Helpful resources 
 link the dam blogpost again lol <br/>
 eli's awesome stuff <br/>
 adrians awesome stuff <br/>
 llvm conference awesome stuff <br/>  
 llvm class references   
+Tysan PR 
