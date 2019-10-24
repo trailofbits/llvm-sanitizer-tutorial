@@ -96,3 +96,6 @@ https://llvm.org/docs/LangRef.html
 https://llvm.org/devmtg/2018-04/
 
 https://reviews.llvm.org/D32199
+
+# Maintainer 
+Carson Harmon carson.harmon@trailofbits.com (@ThatsNotVeryCashMoneyOfYou)
