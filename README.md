@@ -3,7 +3,7 @@
 This is a tutorial on how to build an LLVM sanitizer. 
 
 # Background 
-An LLVM sanitizer is a powerful tool used to instrument and analyze programs. This github repo holds an example sanitizer and step by step docuemtation to integrate a sanitizer into the toolchain. This sanitizer can serve as a template towards building more complex tools. For more information on what sanitizers are, see the related blogpost: https://blog.trailofbits.com/2019/06/25/creating-an-llvm-sanitizer-from-hopes-and-dreams/
+An LLVM sanitizer is a powerful tool used to instrument and analyze programs. This github repo holds an example sanitizer and step by step documentation to integrate a sanitizer into the toolchain. This sanitizer can serve as a template towards building more complex tools. For more information on what sanitizers are, see the related blogpost: https://blog.trailofbits.com/2019/06/25/creating-an-llvm-sanitizer-from-hopes-and-dreams/
 
 # Quickstart: Building the toolchain & running a sanitizer 
 
@@ -20,7 +20,7 @@ cmake -DLLVM_TARGETS_TO_BUILD="X86" .. && make
 cd bin && ./clang -fsanitize=testsan -g -o malloc_target ../../../target_programs/malloc_target.c
 ./malloc_target
 ```
-You should see output from the LLVM pass and additional output from the runtime component when the program is executed. Most of this readme will be from the blogpost above, but in this repo im going to list all the tedious technical details that didn't make it past editing. Note that this post only covers on how to build a sanitizer for Linux. 
+You should see output from the LLVM pass and additional output from the runtime component when the program is executed. Most of this readme will be from the blogpost above, but in this repo, I'm going to list all the tedious technical details that didn't make it past editing. Note that this post only covers on how to build a sanitizer for Linux.
 
 # Building an out of source pass 
 Why build out of source first? Building your instrumentation pass out of source is a good first step when building your sanitizer. This allows you to debug your pass and determine if it's functioning correctly. When building the LLVM tool chain, you can use the `opt` tool to run your pass on bitcode and use the `llvm-dis` tool to view the actual IR. 
@@ -79,7 +79,7 @@ Your IR passes will be operating system agnostic but other parts of the toolchai
 
 If you are having issues with some of the cmake build systems I would double check to see you didn't make any typos. For example if you put the architecture as ${x86}, it needs to be ${X86} etc etc. 
 
-Overall this winternship was a great experience, and I hope that this repo documents what I learned so the rest of you can build sanitizers without needing to comb through the toolchain. Below are some of the helpful resources I linked in the blogpost, they are all really great. 
+Overall this internship was a great experience, and I hope that this repo documents what I learned so the rest of you can build sanitizers without needing to comb through the toolchain. Below are some of the helpful resources I linked in the blogpost, they are all really great.
 
 # Other notes 
 There is actually more that goes into sanitizer development that I didn't cover here. I think the best way to learn is to look at sanitizer pull requests and see what they modify and change. 
