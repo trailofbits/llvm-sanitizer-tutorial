@@ -71,7 +71,7 @@ Now that you have an internal instrumentation pass, time to add it to the manage
 * Later in the same file there is a function called `CreatePasses`, in it check if your sanitizer is being run and if it is add your pass
 
 # Integrating a runtime component 
-* In `clang/lib/Driver/CommonArgs.cpp` the driver calls `collectSaniitzerRuntimes` to decide which runtimes should be used. Add a check like the others to see if your sanitizer should be used, and if it is add it to the list of static runtimes. 
+* In `clang/lib/Driver/ToolChains/CommonArgs.cpp` the driver calls `collectSanitizerRuntimes` to decide which runtimes should be used. Add a check like the others to see if your sanitizer should be used, and if it is add it to the list of static runtimes. 
 * This part is dependent on your operating system. in `lib/Driver/Toolchains/Linux.cpp` find the `getSupportedSanitizers` function and add your sanitizer to this list of the architectures are correct. 
 
 # Some other things I learned 
